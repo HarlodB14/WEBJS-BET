@@ -1,32 +1,40 @@
-import Form from './Form.js'; // Make sure to use the correct path
+import {Form} from './Form.js';
+import {FormStep} from "./FormStep.js";
 
 export default class Bazaar extends HTMLElement {
-
     constructor() {
         super();
         this.attachShadow({mode: 'open'});
-        this.form = new Form();
         this.createFormContainer();
     }
 
+    //methode om formulier aan te maken
     createFormContainer() {
-        this.formContainer = document.createElement('div');
-        this.formContainer.classList.add('container', 'mt-3');
+        let steps = [
+            new FormStep('Stap 1: Afmetingen', ['Lengte']),
+            new FormStep('Stap 2: Afmetingen', ['Breedte']),
+            new FormStep('Stap 3: Aankomst Interval', ['Interval']),
+            new FormStep('Stap 4: Type', ['Type'], true)
+        ];
 
-        this.draw();
-        this.formContainer.appendChild(this.form.header);
-        this.formContainer.appendChild(this.form.formelement);
-        // Append the form container to the shadow DOM
-        this.shadowRoot.appendChild(this.formContainer);
+        let form = new Form(steps);
+        let container = document.createElement('div');
+        container.classList.add('container', 'mt-3');
+
+        this.drawHeader(container);
+
+        let formElement = form.container; // form.container contains the entire form
+        container.appendChild(formElement);
+
+        this.shadowRoot.appendChild(container);
     }
 
-    draw() {
-        this.formContainer.innerHTML = `
-            <div class="row">
-                <div class="col">
-                    <h3 class="mb-3">Bazaar Express Transport</h3>
-                </div>
-            </div>
-        `;
+
+    //methode om header te tekenen boven formulier
+    drawHeader(container) {
+        const header = document.createElement('h3');
+        header.classList.add('mb-3');
+        header.textContent = 'Bazaar Express Transport';
+        container.appendChild(header);
     }
 }
