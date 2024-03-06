@@ -13,6 +13,7 @@ export class Form {
     //teken methode van form
     draw() {
         this.container.innerHTML = ''; // Clear existing content
+        this.container.style.width = '100px'
 
         let currentStep = this.steps[this.currentStep];
         let currentStepContainer = document.createElement('div'); // Create a container for the current step
