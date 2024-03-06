@@ -7,6 +7,9 @@ export class Form {
         this.steps = steps;
         this.currentStep = 0;
 
+        // Add Bootstrap class to the container
+        this.container.classList.add('container', 'mt-3'); // Adjust classes as needed
+
         this.draw();
     }
 
