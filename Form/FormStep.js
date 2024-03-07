@@ -5,6 +5,7 @@ export class FormStep {
         this.title = title;
         this.fields = fields;
         this.renderSelect = renderSelect;
+        this.valid = false;
     }
 
     //methode om invulvelden te tekenen per stap
@@ -16,12 +17,10 @@ export class FormStep {
         this.fields.forEach(fieldName => {
             let element;
             if (this.renderSelect && fieldName === 'Type') {
-                // Create select element for the 'Type' field
                 element = document.createElement('select');
                 element.setAttribute('name', fieldName.toLowerCase());
                 element.classList.add('form-control');
 
-                // Define options for the select element
                 let options = ['Koud transport', 'Breekbaar transport', 'Algemeen transport', 'Pallets', 'Snelkoerier'];
                 options.forEach(optionText => {
                     let option = document.createElement('option');
@@ -29,7 +28,6 @@ export class FormStep {
                     element.appendChild(option);
                 });
             } else {
-                // Create input element for other fields
                 element = document.createElement('input');
                 element.setAttribute('type', 'text');
                 element.setAttribute('name', fieldName.toLowerCase());
@@ -46,4 +44,6 @@ export class FormStep {
         });
         container.appendChild(fieldset);
     }
+
+
 }
