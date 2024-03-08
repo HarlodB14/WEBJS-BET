@@ -1,8 +1,9 @@
-export class Form {
+export class Form extends HTMLFormElement {
 
     //constructor
     constructor(steps) {
-        this.container = document.createElement('div');
+        super();
+        this.container = document.createElement('form');
         this.header = document.createElement('h2');
         this.steps = steps;
         this.currentStep = 0;
@@ -40,11 +41,58 @@ export class Form {
         button.classList.add('btn', 'btn-primary', 'mb-2');
         button.textContent = this.getNextButtonText();
         button.addEventListener('click', () => {
-            if (this.currentStep < this.steps.length - 1) {
-                this.currentStep++;
-                this.draw(); // Redraw the form to display the next step
+            if (this.validate()) {
+                if (this.currentStep < this.steps.length - 1) {
+                    this.currentStep++;
+                    this.draw(); // Redraw the form to display the next step
+                }
             }
         });
         this.container.appendChild(button); // Append button to the form container
     }
+
+    validate() {
+        const currentStepFields = this.steps[this.currentStep].fields;
+        const formData = new FormData(this.container);
+        const formDataObject = Object.fromEntries(formData.entries());
+
+        const clearWarnings = () => {
+            const warningContainer = this.container.querySelector('.warning');
+            if (warningContainer) {
+                warningContainer.remove();
+            }
+        };
+
+        const addWarning = (message) => {
+            const warning = document.createElement('div');
+            warning.classList.add('alert', 'alert-warning', 'warning');
+            warning.textContent = message;
+            warning.style.color = 'red';
+            this.container.appendChild(warning);
+        };
+
+        clearWarnings();
+
+        for (const field of currentStepFields) {
+            const fieldName = field.toLowerCase();
+            const fieldValue = (formDataObject[fieldName] || '').trim();
+
+            if (fieldValue === "") {
+                addWarning(`Vul een ${fieldName} in AUB.`);
+                return false;
+            }
+
+            if (fieldName === 'lengte' || fieldName === 'breedte') {
+                const fieldValueNum = Number(fieldValue);
+                if (isNaN(fieldValueNum) || fieldValueNum < 3 || fieldValueNum > 10) {
+                    addWarning(`Vul een geldige ${fieldName} in tussen 3 en 10.`);
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
+
 }

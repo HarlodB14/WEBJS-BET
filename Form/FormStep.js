@@ -5,7 +5,6 @@ export class FormStep {
         this.title = title;
         this.fields = fields;
         this.renderSelect = renderSelect;
-        this.valid = false;
     }
 
     //methode om invulvelden te tekenen per stap
@@ -32,6 +31,7 @@ export class FormStep {
                 element.setAttribute('type', 'text');
                 element.setAttribute('name', fieldName.toLowerCase());
                 element.classList.add('form-control');
+                element.required = true;
             }
 
             let div = document.createElement('div');
