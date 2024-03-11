@@ -18,6 +18,7 @@ export class Form extends HTMLFormElement {
     draw() {
         this.container.innerHTML = ''; // Clear existing content
         this.container.style.width = '250px'
+        this.container.id = 'form-container'; // Add an id attribute to the container
 
         let currentStep = this.steps[this.currentStep];
         let currentStepContainer = document.createElement('div'); // Create a container for the current step
@@ -55,7 +56,6 @@ export class Form extends HTMLFormElement {
         const currentStepFields = this.steps[this.currentStep].fields;
         const formData = new FormData(this.container);
         const formDataObject = Object.fromEntries(formData.entries());
-
         const clearWarnings = () => {
             const warningContainer = this.container.querySelector('.warning');
             if (warningContainer) {

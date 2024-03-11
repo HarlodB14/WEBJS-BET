@@ -34,17 +34,33 @@ export default class Bazaar extends HTMLElement {
     }
 
 
-    drawTruck() {
-
+    drawTruck(truck) {
+        if (truck) {
+            this.truck.draw(truck.height, truck.width, this.shadowRoot);
+        }
     }
 
     collectFormData() {
-        let formData = new FormData(this.container); // Assuming `this.container` holds the form container element
-        let formDataObject = {};
+        const form = this.shadowRoot.querySelector("form");
+        const formData = new FormData(form);
+        const formDataObject = {};
         formData.forEach((value, key) => {
             formDataObject[key] = value;
         });
+        console.log(formDataObject);
         this.formData = formDataObject;
+        this.createTruck();
+    }
+
+
+
+
+    createTruck() {
+        if (this.checkIfSubmitted()) {
+            const {lengte, breedte, interval, type} = this.formData;
+            this.truck = new Truck(lengte, breedte, interval, type);
+            this.drawTruck(this.truck)
+        }
     }
 
 
@@ -57,5 +73,7 @@ export default class Bazaar extends HTMLElement {
     }
 
 
-
+    checkIfSubmitted() {
+        return Object.keys(this.formData).length > 0;
+    }
 }
